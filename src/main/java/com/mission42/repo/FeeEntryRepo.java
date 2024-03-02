@@ -12,4 +12,5 @@ import java.util.List;
 public interface FeeEntryRepo extends JpaRepository<FeeEntry, Long> {
     public List<FeeEntry> findByPerson(Person person);
     public List<FeeEntry> findByEntryDateBetweenAndPerson(Date startDate, Date endDate, Person person);
+
 }

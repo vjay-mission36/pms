@@ -1,5 +1,6 @@
 package com.mission42.dto;
 
+import com.mission42.model.Person;
 import lombok.*;
 
 import java.util.Date;
@@ -13,5 +14,5 @@ import java.util.Date;
 public class FeeEntryDTO {
     private Date entryDate;
     private double amount;
-    private long personId;
+    private Long personId;
 }

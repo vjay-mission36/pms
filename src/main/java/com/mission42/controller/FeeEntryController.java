@@ -1,7 +1,6 @@
 package com.mission42.controller;
 
 import com.mission42.dto.FeeEntryDTO;
-import com.mission42.model.FeeEntry;
 import com.mission42.service.FeeEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,15 +20,22 @@ public class FeeEntryController {
     private FeeEntryService feeEntryService;
 
     @PostMapping
-    public ResponseEntity<String> addBulkEntries(@RequestBody List<FeeEntryDTO> feeEntries){
+    public ResponseEntity<String> addBulkEntries(@RequestBody List<FeeEntryDTO> feeEntries) {
         StringBuilder strBuilder = new StringBuilder();
         boolean flag = feeEntryService.updateBulkFeeEntries(feeEntries);
-        if(flag){
-            strBuilder.append("Fee Entries are appended {} "+feeEntries.get(0).getPersonId());
+        if (flag) {
+            strBuilder.append("Fee Entries are appended {} " + feeEntries.get(0).getPersonId());
             return ResponseEntity.status(HttpStatus.OK).body(strBuilder.toString());
-        }else{
+        } else {
             strBuilder.append("Some thing went wrong .. Please try again");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(strBuilder.toString());
         }
     }
+
+/*
+    @GetMapping("/{year}/{pid}")
+    public List<FeeEntry> getFeeEntriesForGivenYear(@PathVariable("year") String year, @PathVariable("pid") String pid) {
+        return feeEntryService.getAllEntries4Person(year, pid);
+    }
+ */
 }

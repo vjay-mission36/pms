@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
     private static final Logger log = LoggerFactory.getLogger(PersonService.class);
     @Autowired
     private PersonRepo personRepo;
+
 
     public Person getPersonById(final Long id) {
         Optional<Person> personOption = personRepo.findById(id);
@@ -35,8 +37,8 @@ public class PersonService {
     }
 
     public void updatePerson(PersonDTO personDTO) {
-        long id = personDTO.getId();
-        Person person = personRepo.findById(id).orElse(new Person());
+
+        Person person = personRepo.findById(1l).orElse(new Person());
         person.setFirstName(personDTO.getFirstName());
         person.setLastName(personDTO.getLastName());
         person.setFatherName(personDTO.getFatherName());
@@ -49,5 +51,17 @@ public class PersonService {
         Optional<Person> personOption = personRepo.findById(id);
         return personRepo.findById(id).orElseThrow().getEntries();
     }
+/*
+    public Person createPerson(PersonDTO p) {
+        Person person = Person.builder().firstName(p.getFirstName()).lastName(p.getLastName())
+                .fatherName(p.getFatherName()).adhar(p.getAdhar()).mobile(p.getMobile())
+                .dateOfBirth(p.getDateOfBirth()).dateOfBaptism(p.getDateOfBaptism())
+                .isAlive(p.isAlive())
+                .build();
+        final Set<FeeEntry> feeEntries = p.getFeeEntryDTOS().stream().map(fe -> FeeEntry.builder().amount(fe.getAmount()).entryDate(fe.getEntryDate()).build()).collect(Collectors.toSet());
+        person.setEntries(feeEntries);
+        return personRepo.save(person);
+    }
 
+ */
 }

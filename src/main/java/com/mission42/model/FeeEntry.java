@@ -20,6 +20,7 @@ public class FeeEntry {
     private Date entryDate;
     private Double amount;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Person.class)
+    @ManyToOne
+    @JoinColumn(name = "person_id", nullable = true)
     private Person person;
 }

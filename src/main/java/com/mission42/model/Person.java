@@ -26,9 +26,9 @@ public class Person {
     private String mobile;
     private boolean isAlive;
 
-    @OneToMany(targetEntity = Address.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "person")
     private Set<Address> addresses;
 
-    @OneToMany(targetEntity = FeeEntry.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "person")
     private Set<FeeEntry> entries;
 }
