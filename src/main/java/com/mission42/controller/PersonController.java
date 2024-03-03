@@ -34,16 +34,22 @@ public class PersonController {
         return ResponseEntity.status(HttpStatus.OK).body("Person with id:" + id + " is removed");
     }
 
-    @GetMapping("/entries/{id}")
+    @GetMapping("/{id}/entries")
     public ResponseEntity<List<FeeEntry>> getFeeEntriesById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(personService.getFeeEntriesByPersonId(id));
     }
-
 
     @PostMapping
     public ResponseEntity<Person> createPerson(@RequestBody PersonDTO p){
         return ResponseEntity.status(HttpStatus.CREATED).body(personService.createPerson(p));
     }
+
+    @PatchMapping
+    public ResponseEntity<String> updatePersonDetails(@RequestBody PersonDTO personDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(personService.updatePerson(personDTO));
+    }
+
+
 
 
 }

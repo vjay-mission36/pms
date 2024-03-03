@@ -1,6 +1,7 @@
 package com.mission42.service;
 
 import com.mission42.dto.PersonDTO;
+import com.mission42.exception.PersonNotFoundException;
 import com.mission42.model.FeeEntry;
 import com.mission42.model.Person;
 import com.mission42.repo.PersonRepo;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,21 +37,32 @@ public class PersonService {
         personRepo.deleteById(id);
     }
 
-    public void updatePerson(PersonDTO personDTO) {
-
-        Person person = personRepo.findById(1l).orElse(new Person());
-        person.setFirstName(personDTO.getFirstName());
-        person.setLastName(personDTO.getLastName());
-        person.setFatherName(personDTO.getFatherName());
-        person.setAdhar(personDTO.getAdhar());
-        person.setMobile(personDTO.getMobile());
-        personRepo.save(person);
+    public String updatePerson(PersonDTO personDTO) throws PersonNotFoundException {
+        String message = null;
+        Person person = personRepo.findById(personDTO.getId()).orElse(new Person());
+        if (person.getId() == null) {
+            message = "Person id - " + personDTO.getId() + " not found ";
+            log.error(message);
+            throw new PersonNotFoundException("Person id - {} not found ", personDTO.getId());
+        } else {
+            // best way would be update the field when it is not null
+            // but in the interest of time
+            person.setFirstName(personDTO.getFirstName());
+            person.setLastName(personDTO.getLastName());
+            person.setFatherName(personDTO.getFatherName());
+            person.setAdhar(personDTO.getAdhar());
+            person.setMobile(personDTO.getMobile());
+            personRepo.save(person);
+            message = "Person id - " + personDTO.getId() + "  found, Fields are updated. ";
+        }
+        return message;
     }
 
     public List<FeeEntry> getFeeEntriesByPersonId(Long id) {
         Optional<Person> personOption = personRepo.findById(id);
         return personRepo.findById(id).orElseThrow().getEntries();
     }
+
 
     public Person createPerson(PersonDTO p) {
         Person person = Person.builder().firstName(p.getFirstName()).lastName(p.getLastName())
@@ -60,7 +71,16 @@ public class PersonService {
                 .isAlive(p.isAlive())
                 .build();
 
-        final List<FeeEntry> collect = p.getEntries().stream().map(fe -> FeeEntry.builder().entryDate(fe.getEntryDate()).amount(fe.getAmount()).build()).collect(Collectors.toList());
+        final List<FeeEntry> collect = p.getEntries().stream()
+                .map(fe -> FeeEntry.builder().entryDate(fe.getEntryDate()).amount(fe.getAmount()).build())
+                .collect(Collectors.toList());
+
+        // set the person for each Fee entry
+        for (FeeEntry fe : collect) {
+            fe.setPerson(person);
+        }
+        System.out.println(" Collect");
+
         person.setEntries(collect);
         return personRepo.save(person);
     }
