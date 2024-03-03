@@ -1,9 +1,11 @@
 package com.mission42.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,7 +17,7 @@ import java.util.Set;
 @ToString
 public class Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String firstName;
     private String lastName;
@@ -26,9 +28,11 @@ public class Person {
     private String mobile;
     private boolean isAlive;
 
-    @OneToMany(mappedBy = "person")
-    private Set<Address> addresses;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Address> addresses;
 
-    @OneToMany(mappedBy = "person")
-    private Set<FeeEntry> entries;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<FeeEntry> entries;
 }

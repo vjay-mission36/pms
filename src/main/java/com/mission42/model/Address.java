@@ -1,5 +1,6 @@
 package com.mission42.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import lombok.*;
 @ToString
 public class Address {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String type; // latter can be converted enum would be better choice
     private String line1;
@@ -19,8 +20,9 @@ public class Address {
     private String village;
     private String state;
     private String pin;
-    @ManyToOne
-    @JoinColumn(nullable = true, name = "person_id")
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, targetEntity = Person.class)
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
 }
 

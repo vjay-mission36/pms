@@ -4,7 +4,9 @@ import com.mission42.dto.PersonDTO;
 import com.mission42.model.Address;
 import com.mission42.model.Person;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class PersonUtil {
@@ -17,7 +19,7 @@ public class PersonUtil {
                 .state(personDto.getAddressDTO().getState())
                 .pin(personDto.getAddressDTO().getPin())
                 .build();
-        Set<Address> addresses = new HashSet<>();
+        List<Address> addresses = new ArrayList<>();
         addresses.add(address);
 
         Person p = Person.builder().firstName(personDto.getFirstName())

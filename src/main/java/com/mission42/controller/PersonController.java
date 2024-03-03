@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -34,15 +35,15 @@ public class PersonController {
     }
 
     @GetMapping("/entries/{id}")
-    public ResponseEntity<Set<FeeEntry>> getFeeEntriesById(@PathVariable Long id) {
+    public ResponseEntity<List<FeeEntry>> getFeeEntriesById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(personService.getFeeEntriesByPersonId(id));
     }
 
-    /*
+
     @PostMapping
     public ResponseEntity<Person> createPerson(@RequestBody PersonDTO p){
         return ResponseEntity.status(HttpStatus.CREATED).body(personService.createPerson(p));
     }
 
-     */
+
 }

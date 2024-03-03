@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -47,21 +48,20 @@ public class PersonService {
         personRepo.save(person);
     }
 
-    public Set<FeeEntry> getFeeEntriesByPersonId(Long id) {
+    public List<FeeEntry> getFeeEntriesByPersonId(Long id) {
         Optional<Person> personOption = personRepo.findById(id);
         return personRepo.findById(id).orElseThrow().getEntries();
     }
-/*
+
     public Person createPerson(PersonDTO p) {
         Person person = Person.builder().firstName(p.getFirstName()).lastName(p.getLastName())
                 .fatherName(p.getFatherName()).adhar(p.getAdhar()).mobile(p.getMobile())
                 .dateOfBirth(p.getDateOfBirth()).dateOfBaptism(p.getDateOfBaptism())
                 .isAlive(p.isAlive())
                 .build();
-        final Set<FeeEntry> feeEntries = p.getFeeEntryDTOS().stream().map(fe -> FeeEntry.builder().amount(fe.getAmount()).entryDate(fe.getEntryDate()).build()).collect(Collectors.toSet());
-        person.setEntries(feeEntries);
+
+        final List<FeeEntry> collect = p.getEntries().stream().map(fe -> FeeEntry.builder().entryDate(fe.getEntryDate()).amount(fe.getAmount()).build()).collect(Collectors.toList());
+        person.setEntries(collect);
         return personRepo.save(person);
     }
-
- */
 }
